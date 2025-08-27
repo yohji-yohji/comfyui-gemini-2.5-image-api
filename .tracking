@@ -1,0 +1,11 @@
+.gitattributes
+.github/workflows/publish.yml
+.gitignore
+Gemini2_0_nodes.py
+LICENSE
+README.md
+README_EN.md
+__init__.py
+pyproject.toml
+requirements.txt
+workflow/Gemini-API.png
