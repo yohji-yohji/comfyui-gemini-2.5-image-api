@@ -29,6 +29,10 @@ class GeminiImageGenerator:
                 "image2": ("IMAGE",),
                 "image3": ("IMAGE",),
                 "image4": ("IMAGE",),
+                "image5": ("IMAGE",),
+                "image6": ("IMAGE",),
+                "image7": ("IMAGE",),
+                "image8": ("IMAGE",),
             }
         }
 
@@ -37,7 +41,7 @@ class GeminiImageGenerator:
     FUNCTION = "generate_image"
     CATEGORY = "Google-Gemini"
     
-    def generate_image(self, prompt, api_key, custom_base_url, model, aspect_ratio, temperature, seed=66666666, image1=None, image2=None, image3=None, image4=None, **kwargs):
+    def generate_image(self, prompt, api_key, custom_base_url, model, aspect_ratio, temperature, seed=66666666, image1=None, image2=None, image3=None, image4=None, image5=None, image6=None, image7=None, image8=None, **kwargs):
         """生成图像"""
         # 处理兼容性：如果传入了images参数，将其分解到各个image参数
         if 'images' in kwargs and kwargs['images'] is not None:
@@ -52,6 +56,14 @@ class GeminiImageGenerator:
                     image3 = images[2]
                 if len(images) >= 4 and image4 is None:
                     image4 = images[3]
+                if len(images) >= 5 and image5 is None:
+                    image5 = images[4]
+                if len(images) >= 6 and image6 is None:
+                    image6 = images[5]
+                if len(images) >= 7 and image7 is None:
+                    image7 = images[6]
+                if len(images) >= 8 and image8 is None:
+                    image8 = images[7]
             else:
                 # 如果images是单个图像，分配给image1
                 if image1 is None:
@@ -84,7 +96,15 @@ class GeminiImageGenerator:
         
         # 处理参考图像
         reference_count = 0
-        images_list = [image1, image2, image3, image4]
+        images_list = [image1, image2, image3, image4, image5, image6, image7, image8]
+        
+        # 如果通过images参数传入了更多图像，添加到列表中
+        if 'images' in kwargs and kwargs['images'] is not None:
+            extra_images = kwargs['images']
+            if isinstance(extra_images, (list, tuple)):
+                # 添加第9张及以后的图像（跳过前8张，因为已经分配给了image1-8）
+                for i in range(8, len(extra_images)):
+                    images_list.append(extra_images[i])
         
         for idx, image in enumerate(images_list, 1):
             if image is not None:
