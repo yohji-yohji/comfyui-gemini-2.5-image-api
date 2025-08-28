@@ -25,7 +25,10 @@ class GeminiImageGenerator:
             },
             "optional": {
                 "seed": ("INT", {"default": 66666666, "min": 0, "max": 2147483647}),
-                "images": ("IMAGE",),
+                "image1": ("IMAGE",),
+                "image2": ("IMAGE",),
+                "image3": ("IMAGE",),
+                "image4": ("IMAGE",),
             }
         }
 
@@ -34,8 +37,26 @@ class GeminiImageGenerator:
     FUNCTION = "generate_image"
     CATEGORY = "Google-Gemini"
     
-    def generate_image(self, prompt, api_key, custom_base_url, model, aspect_ratio, temperature, seed=66666666, images=None):
+    def generate_image(self, prompt, api_key, custom_base_url, model, aspect_ratio, temperature, seed=66666666, image1=None, image2=None, image3=None, image4=None, **kwargs):
         """生成图像"""
+        # 处理兼容性：如果传入了images参数，将其分解到各个image参数
+        if 'images' in kwargs and kwargs['images'] is not None:
+            images = kwargs['images']
+            # 如果images是一个列表或批次，分配到各个image参数
+            if isinstance(images, (list, tuple)):
+                if len(images) >= 1 and image1 is None:
+                    image1 = images[0]
+                if len(images) >= 2 and image2 is None:
+                    image2 = images[1]
+                if len(images) >= 3 and image3 is None:
+                    image3 = images[2]
+                if len(images) >= 4 and image4 is None:
+                    image4 = images[3]
+            else:
+                # 如果images是单个图像，分配给image1
+                if image1 is None:
+                    image1 = images
+        
         # 检查API密钥
         if not api_key or len(api_key) < 10:
             raise ValueError("错误: 未提供有效的API密钥")
@@ -63,11 +84,17 @@ class GeminiImageGenerator:
         
         # 处理参考图像
         reference_count = 0
-        if images is not None:
-            batch_size = images.shape[0]
-            for i in range(batch_size):
+        images_list = [image1, image2, image3, image4]
+        
+        for idx, image in enumerate(images_list, 1):
+            if image is not None:
                 try:
-                    input_image = images[i].cpu().numpy()
+                    # 如果是批量图像，只取第一张
+                    if len(image.shape) == 4:  # 批量图像 [batch, height, width, channels]
+                        input_image = image[0].cpu().numpy()
+                    else:  # 单张图像 [height, width, channels]
+                        input_image = image.cpu().numpy()
+                    
                     input_image = (input_image * 255).astype(np.uint8)
                     pil_image = Image.fromarray(input_image)
                     
@@ -81,11 +108,11 @@ class GeminiImageGenerator:
                     content_parts.append(img_part)
                     reference_count += 1
                 except Exception as e:
-                    raise RuntimeError(f"处理第{i+1}张参考图像时出错: {str(e)}")
-            
-            if reference_count > 0:
-                suffix = " Use this reference image as guidance." if reference_count == 1 else f" Use these {reference_count} reference images as guidance."
-                content_parts[0]["text"] += suffix
+                    raise RuntimeError(f"处理第{idx}张参考图像时出错: {str(e)}")
+        
+        if reference_count > 0:
+            suffix = " Use this reference image as guidance." if reference_count == 1 else f" Use these {reference_count} reference images as guidance."
+            content_parts[0]["text"] += suffix
         
         # 构建请求数据
         contents = [{"role": "user", "parts": content_parts}]
