@@ -1,0 +1,8 @@
+[project]
+name = "comfyui-gemini2.5-image-api"
+description = "ComfyUI节点：使用Gemini 2.5 API生成图像，支持文本提示词和参考图像"
+version = "1.0.0"
+license = {text = "MIT"}
+
+[project.urls]
+Repository = "https://github.com/your-username/gemini2.5-image-api"
