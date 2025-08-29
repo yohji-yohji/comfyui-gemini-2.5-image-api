@@ -17,7 +17,7 @@ A specialized ComfyUI node for Gemini 2.5 image generation, supporting both text
 1. **Clone repository to ComfyUI plugin directory**
    ```bash
    cd ComfyUI/custom_nodes
-   git clone https://github.com/your-repo/gemini2.5-image-api.git
+   git clone https://github.com/yohji-yohji/comfyui-gemini-2.5-image-api.git
    ```
 
 2. **Install dependencies**

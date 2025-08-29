@@ -17,7 +17,7 @@
 1. **克隆仓库到ComfyUI插件目录**
    ```bash
    cd ComfyUI/custom_nodes
-   git clone https://github.com/your-repo/gemini2.5-image-api.git
+   git clone https://github.com/yohji-yohji/comfyui-gemini-2.5-image-api.git
    ```
 
 2. **安装依赖包**
