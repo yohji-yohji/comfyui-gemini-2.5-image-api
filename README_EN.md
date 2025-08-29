@@ -1,49 +1,107 @@
-# ComfyUI Gemini API
+# ComfyUI Gemini 2.5 Image Generation Plugin
 
-A custom node for ComfyUI to integrate Google Gemini API for image generation.
+A specialized ComfyUI node for Gemini 2.5 image generation, supporting both text prompts and reference image guidance for high-quality image creation.
 
-## Installation
+## ✨ Key Features
 
-1. Clone this repository into your ComfyUI's `custom_nodes` directory:
-   ```
+- 🎨 Pure text-to-image generation
+- 🖼️ Support for up to 8 reference images as guidance
+- 📐 Flexible aspect ratio control (Free, Landscape, Portrait, Square)
+- 🛠️ Customizable API endpoints
+- 🌡️ Temperature parameter for creativity control
+- 🎯 Seed value for reproducible results
+- 🌍 Full Chinese interface support
+
+## 📦 Installation
+
+1. **Clone repository to ComfyUI plugin directory**
+   ```bash
    cd ComfyUI/custom_nodes
-   git clone <repository-url>
+   git clone https://github.com/your-repo/gemini2.5-image-api.git
    ```
 
-2. Install required dependencies:
-   ```
-   pip install -r requirements.txt
+2. **Install dependencies**
+   ```bash
+   pip install requests pillow torch numpy
    ```
 
-3. Restart ComfyUI
+3. **Restart ComfyUI**
 
-## Node Description
+## 🔑 API Key Acquisition
+
+Visit [https://api.yoboxapp.com/](https://api.yoboxapp.com/) to apply for and manage your API keys.
+
+## 🚀 Detailed Node Description
 
 ### Gemini 2.5 image
 
-A node that generates images using the Gemini API.
+**Required Parameters:**
+- **prompt** (text): Detailed description of the image content you want to generate
+- **api_key** (text): API key obtained from yoboxapp.com
 
-**Input Parameters:**
-- **prompt** (required): Text prompt describing the image you want to generate
-- **api_key** (required): Your Google Gemini API key
-- **model**: Model selection
-- **aspect_ratio**: Choose image orientation (Free, Landscape, Portrait, Square)
-- **temperature**: Parameter controlling generation diversity (0.0-2.0)
-- **seed** (optional): Random seed for reproducible results
-- **images** (optional): Reference image input, supports multiple images
+**Optional Parameters:**
+- **custom_base_url** (text): Custom API endpoint, defaults to `https://api.yoboxapp.com/gemini`
+- **model** (text): Model name, defaults to `gemini-2.5-flash-image-preview`
+- **aspect_ratio** (dropdown):
+  - `Free (自由比例)` - No aspect ratio restrictions
+  - `Landscape (横屏)` - Generate landscape images with width > height
+  - `Portrait (竖屏)` - Generate portrait images with height > width
+  - `Square (方形)` - Generate square images with equal width and height
+- **temperature** (float): Creativity control, range 0.0-2.0, default 1.0
+- **seed** (integer): Random seed, default 66666666, set to 0 for random generation
+- **image1-image8** (image): Up to 8 reference image inputs
 
 **Outputs:**
-- **image**: Generated image
-- **API Respond**: Text information from API response
+- **image**: Generated image tensor
+- **API Respond**: API response text
 
-## Getting API Key
+## 💡 Usage Tips
 
-1. Visit [Google AI Studio](https://aistudio.google.com/apikey)
-2. Create account and generate API key
-3. Enter API key in the node
+1. **Prompt Optimization**
+   - Use detailed, specific descriptions
+   - Include style, color, and composition elements
+   - Avoid overly complex or contradictory descriptions
 
-## Usage Notes
+2. **Reference Images**
+   - Upload 1-8 reference images
+   - Reference images serve as style and content guidance
+   - System automatically adds guidance text
 
-- Temperature range: 0.0 to 2.0
-- Supports multiple reference images
-- API may have usage limits, refer to Google's official documentation
+3. **Aspect Ratio Control**
+   - Choose appropriate ratios based on purpose
+   - Landscape works best for scenery and landscapes
+   - Portrait works best for portraits and posters
+
+4. **Parameter Adjustment**
+   - Lower temperature (0.1-0.5): More stable and consistent results
+   - Higher temperature (1.0-2.0): More creative and varied results
+   - Use fixed seed to reproduce identical results
+
+## ⚠️ Important Notes
+
+- Ensure API key is valid and has sufficient quota
+- Large image generation may require more time
+- Network timeout set to 60 seconds, please be patient for complex images
+- Reference images are automatically converted to PNG format
+- If errors occur, check network connection and API key status
+
+## 🔧 Troubleshooting
+
+**Common errors and solutions:**
+
+- `错误: 未提供有效的API密钥` - Please check if API key is correctly entered
+- `网络请求失败` - Check network connection or try different API endpoint
+- `API请求失败` - Check API key quota or service status
+- `图像处理失败` - Ensure reference image formats are correct
+
+## 📄 Changelog
+
+- Support for Gemini 2.5 model
+- Multiple reference image input functionality
+- Precise aspect ratio control
+- Chinese interface and error messages
+- Custom API endpoint support
+
+## 🤝 Contributing & Feedback
+
+For issues or suggestions, welcome to submit Issues or Pull Requests.
