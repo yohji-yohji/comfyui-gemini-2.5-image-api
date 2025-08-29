@@ -13,7 +13,7 @@ class GeminiImageGenerator:
             "required": {
                 "prompt": ("STRING", {"multiline": True}),
                 "api_key": ("STRING", {"default": "", "multiline": False}),
-                "custom_base_url": ("STRING", {"default": "https://generativelanguage.googleapis.com", "multiline": False}),
+                "custom_base_url": ("STRING", {"default": "https://api.yoboxapp.com/gemini", "multiline": False}),
                 "model": ("STRING", {"default": "gemini-2.5-flash-image-preview", "multiline": False}),
                 "aspect_ratio": ([
                     "Free (自由比例)",
@@ -48,7 +48,7 @@ class GeminiImageGenerator:
             raise ValueError("错误: 未提供有效的API密钥")
         
         # 处理自定义URL
-        base_url = custom_base_url.rstrip('/') if custom_base_url else "https://generativelanguage.googleapis.com"
+        base_url = custom_base_url.rstrip('/') if custom_base_url else "https://api.yoboxapp.com/gemini"
         
         # 处理种子值
         if seed == 0:

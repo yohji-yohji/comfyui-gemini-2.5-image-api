@@ -1,49 +1,107 @@
-# ComfyUI Gemini API
+# ComfyUI Gemini 2.5 图像生成插件
 
-用于在ComfyUI中调用Google Gemini API生成图像的节点。
+这是一个专为ComfyUI设计的Gemini 2.5图像生成节点，支持通过文本提示词和参考图像生成高质量图像。
 
-## 安装说明
+## ✨ 主要特性
 
-1. 将此存储库克隆到ComfyUI的`custom_nodes`目录：
-   ```
+- 🎨 支持纯文本生成图像
+- 🖼️ 支持多达8张参考图像作为引导
+- 📐 灵活的纵横比控制（自由比例、横屏、竖屏、方形）
+- 🛠️ 可自定义API端点
+- 🌡️ 温度参数调节生成多样性
+- 🎯 种子值控制结果重现性
+- 🌍 完整中文界面支持
+
+## 📦 安装说明
+
+1. **克隆仓库到ComfyUI插件目录**
+   ```bash
    cd ComfyUI/custom_nodes
-   git clone <repository-url>
+   git clone https://github.com/your-repo/gemini2.5-image-api.git
    ```
 
-2. 安装所需依赖：
-   ```
-   pip install -r requirements.txt
+2. **安装依赖包**
+   ```bash
+   pip install requests pillow torch numpy
    ```
 
-3. 重启ComfyUI
+3. **重启ComfyUI**
 
-## 节点说明
+## 🔑 API密钥获取
+
+访问 [https://api.yoboxapp.com/](https://api.yoboxapp.com/) 申请和管理你的API密钥。
+
+## 🚀 节点详细说明
 
 ### Gemini 2.5 image
 
-通过Gemini API生成图像的节点。
+**必填参数：**
+- **prompt** (文本)：详细描述你想生成的图像内容
+- **api_key** (文本)：从 https://api.yoboxapp.com/ 获取的API密钥
 
-**输入参数：**
-- **prompt** (必填)：描述你想要生成的图像的文本提示词
-- **api_key** (必填)：你的Google Gemini API密钥
-- **model**：模型选择
-- **aspect_ratio**：选择图像方向（自由比例、横屏、竖屏、方形）
-- **temperature**：控制生成多样性的参数（0.0-2.0）
-- **seed** (可选)：随机种子，指定值可重现结果
-- **images** (可选)：参考图像输入，支持多张图片
+**可选参数：**
+- **custom_base_url** (文本)：自定义API端点，默认为 `https://api.yoboxapp.com/gemini`
+- **model** (文本)：模型名称，默认为 `gemini-2.5-flash-image-preview`
+- **aspect_ratio** (下拉选择)：
+  - `Free (自由比例)` - 不限制图像比例
+  - `Landscape (横屏)` - 生成宽度大于高度的横向图像
+  - `Portrait (竖屏)` - 生成高度大于宽度的纵向图像
+  - `Square (方形)` - 生成正方形图像
+- **temperature** (浮点数)：创意度控制，范围0.0-2.0，默认1.0
+- **seed** (整数)：随机种子，默认66666666，设为0则随机生成
+- **image1-image8** (图像)：最多8张参考图像输入
 
 **输出：**
-- **image**：生成的图像
-- **API Respond**：API返回的文本信息
+- **image**：生成的图像张量
+- **API Respond**：API返回的响应文本
 
-## 获取API密钥
+## 💡 使用技巧
 
-1. 访问[Google AI Studio](https://aistudio.google.com/apikey)
-2. 创建账户并生成API密钥
-3. 在节点中输入API密钥
+1. **提示词优化**
+   - 使用详细、具体的描述
+   - 包含风格、色彩、构图等要素
+   - 避免过于复杂或矛盾的描述
 
-## 使用说明
+2. **参考图像**
+   - 可以上传1-8张参考图像
+   - 参考图像会作为风格和内容指导
+   - 系统会自动添加引导文本
 
-- 温度值范围：0.0到2.0
-- 支持多张参考图像输入
-- API可能有使用限制，请查阅Google官方文档
+3. **纵横比控制**
+   - 根据用途选择合适的比例
+   - 横屏适合风景、场景类图像
+   - 竖屏适合人像、海报类图像
+
+4. **参数调节**
+   - temperature较低(0.1-0.5)：结果更稳定一致
+   - temperature较高(1.0-2.0)：结果更有创意变化
+   - 使用固定seed可以重现相同结果
+
+## ⚠️ 注意事项
+
+- 确保API密钥有效且有足够额度
+- 大尺寸图像生成可能需要更长时间
+- 网络超时设置为60秒，复杂图像请耐心等待
+- 参考图像会自动转换为PNG格式
+- 如遇到错误，检查网络连接和API密钥状态
+
+## 🔧 故障排除
+
+**常见错误及解决方案：**
+
+- `错误: 未提供有效的API密钥` - 请检查API密钥是否正确输入
+- `网络请求失败` - 检查网络连接或尝试更换API端点
+- `API请求失败` - 检查API密钥额度或服务状态
+- `图像处理失败` - 确保参考图像格式正确
+
+## 📄 更新日志
+
+- 支持Gemini 2.5模型
+- 多参考图像输入功能
+- 纵横比精确控制
+- 中文界面和错误提示
+- 自定义API端点支持
+
+## 🤝 贡献与反馈
+
+如有问题或建议，欢迎提交Issue或Pull Request。
